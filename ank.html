@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANA - AXC QUANTUM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: #0a0f0f;
+            color: #00ffcc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Efek grid latar belakang (mirip seperti aslinya) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 200, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 200, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Lingkaran kabur di pojok (efek quantum) */
+        .blur-circle {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 255, 200, 0.15), transparent 70%);
+            top: -100px;
+            right: -100px;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        .blur-circle2 {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(0, 100, 255, 0.15), transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card {
+            background: rgba(10, 20, 20, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 200, 0.3);
+            border-radius: 24px;
+            padding: 30px 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 200, 0.2);
+            text-align: center;
+        }
+
+        /* Header "AXC QUANTUM" */
+        .quantum-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #00ccaa;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .quantum-header span:first-child {
+            color: #00ffcc;
+            text-shadow: 0 0 8px #00ffcc;
+        }
+
+        .quantum-header span:last-child {
+            color: #006688;
+        }
+
+        /* Loading 3D Assets */
+        .loading-3d {
+            background: #0a1515;
+            border: 1px solid #00ccaa;
+            border-radius: 40px;
+            padding: 12px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #00ffcc;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .loading-3d .dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .loading-3d .dots span {
+            width: 8px;
+            height: 8px;
+            background-color: #00ffcc;
+            border-radius: 50%;
+            animation: blink 1.4s infinite;
+        }
+
+        .loading-3d .dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .loading-3d .dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* DANA Logo besar */
+        .dana-logo {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #00ffcc;
+            text-shadow: 0 0 20px #00ffcc;
+            line-height: 1;
+            margin-bottom: 5px;
+            letter-spacing: 4px;
+        }
+
+        .premium-gateway {
+            font-size: 0.8rem;
+            color: #0088aa;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        /* Transfer Tujuan */
+        .transfer-tujuan {
+            text-align: left;
+            margin-bottom: 15px;
+            color: #00ccaa;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .va-box {
+            background: #0a1515;
+            border: 1px solid #00ccaa;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .va-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffcc, transparent);
+            animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .va-label {
+            font-size: 0.7rem;
+            color: #00aabb;
+            margin-bottom: 5px;
+        }
+
+        .va-number {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #00ffcc;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px #00ffcc;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid #00ccaa;
+            color: #00ffcc;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .copy-btn:hover {
+            background: #00ccaa20;
+            box-shadow: 0 0 15px #00ffcc;
+        }
+
+        /* Secure Encryption */
+        .secure-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #00ccaa30;
+            font-size: 0.7rem;
+            color: #00aabb;
+        }
+
+        .secure-footer .left {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .secure-footer .right {
+            color: #00ffcc;
+            font-weight: bold;
+        }
+
+        /* Notifikasi copy */
+        .copy-notif {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00ccaa;
+            color: #0a0f0f;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px #00ffcc;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 999;
+        }
+
+        .copy-notif.show {
+            opacity: 1;
+        }
+
+        /* responsif */
+        @media (max-width: 480px) {
+            .dana-logo {
+                font-size: 4rem;
+            }
+            .va-number {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Elemen blur latar -->
+    <div class="blur-circle"></div>
+    <div class="blur-circle2"></div>
+
+    <div class="container">
+        <div class="card">
+            <!-- Header AXC QUANTUM -->
+            <div class="quantum-header">
+                <span>AXC QUANTUM</span>
+                <span>v4.2.1</span>
+            </div>
+
+            <!-- Loading 3D Assets -->
+            <div class="loading-3d">
+                <span>LOADING 3D ASSETS...</span>
+                <div class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <!-- DANA Large -->
+            <div class="dana-logo">DANA</div>
+            <div class="premium-gateway">PREMIUM GATEWAY</div>
+
+            <!-- Transfer Tujuan -->
+            <div class="transfer-tujuan">
+                <span>⟁ TRANSFER TUJUAN</span>
+            </div>
+
+            <!-- Virtual Account Box -->
+            <div class="va-box">
+                <div class="va-label">Nomor Virtual Account</div>
+                <div class="va-number">0859 2298 5468</div>
+                <button class="copy-btn" id="copyBtn">
+                    <span>📋</span> SALIN NOMOR
+                </button>
+            </div>
+
+            <!-- Footer Secure Encryption -->
+            <div class="secure-footer">
+                <div class="left">
+                    <span>🔒</span>
+                    <span>SECURE ENCRYPTION //</span>
+                </div>
+                <div class="right">AXC ENGINE V4</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifikasi Copy -->
+    <div class="copy-notif" id="copyNotif">NOMOR BERHASIL DISALIN!</div>
+
+    <script>
+        const copyBtn = document.getElementById('copyBtn');
+        const copyNotif = document.getElementById('copyNotif');
+        const vaNumber = '085922985468'; // tanpa spasi buat copy
+
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(vaNumber);
+                
+                // Tampilkan notifikasi
+                copyNotif.classList.add('show');
+                setTimeout(() => {
+                    copyNotif.classList.remove('show');
+                }, 2000);
+
+                // Efek kilat pada tombol
+                copyBtn.style.background = '#00ccaa30';
+                setTimeout(() => {
+                    copyBtn.style.background = 'transparent';
+                }, 200);
+            } catch (err) {
+                alert('Gagal menyalin!');
+            }
+        });
+    </script>
+</body>
+</html>
